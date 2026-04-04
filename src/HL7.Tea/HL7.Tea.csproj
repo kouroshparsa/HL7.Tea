@@ -8,10 +8,14 @@
     <Version>1.0.0</Version>
     <Authors>Kourosh Parsa</Authors>
     <Description>HL7 processing library</Description>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="RandomFriendlyNameGenerator" Version="1.0.9" />
+	<None Include ="..\..\README.md" Pack="true" PackagePath=""/>
+	<None Include ="..\..\LICENSE" Pack="true" PackagePath=""/>
   </ItemGroup>
  
  
