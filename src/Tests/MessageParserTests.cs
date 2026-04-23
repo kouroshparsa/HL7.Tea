@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using HL7.Tea.core;
+using HL7.Tea.Core;
 
 namespace HL7.Tea.tests
 {
@@ -17,35 +17,35 @@ ZFH|CVC||F||test2@gmail.com|hi^ther";
         [TestMethod]
         public void TestContent()
         {
-            var msg = new Message(TEST_MSG);
+            var msg = new HL7Message(TEST_MSG);
             Assert.AreEqual(TEST_MSG.Replace("\n", ""), msg.Content);
         }
 
         [TestMethod]
         public void TestGetField()
         {
-            var msg = new Message(TEST_MSG);
+            var msg = new HL7Message(TEST_MSG);
             Assert.AreEqual("A03", msg.GetFieldOne("EVN-1"));
         }
 
         [TestMethod]
         public void TestGetField2()
         {
-            var msg = new Message(TEST_MSG);
+            var msg = new HL7Message(TEST_MSG);
             Assert.AreEqual("MR", msg.GetFieldOne("PID-3.5"));
         }
 
         [TestMethod]
         public void TestGetField3()
         {
-            var msg = new Message(TEST_MSG);
+            var msg = new HL7Message(TEST_MSG);
             Assert.AreEqual("ADT^A03", msg.GetFieldOne("MSH-9"));
         }
 
         [TestMethod]
         public void TestSetField()
         {
-            var msg = new Message(TEST_MSG);
+            var msg = new HL7Message(TEST_MSG);
             string exp = "RC123";
             msg.SetField("PID-2", exp);
             Assert.AreEqual(exp, msg.GetFieldOne("PID-2"));

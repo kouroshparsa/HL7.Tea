@@ -1,4 +1,4 @@
-﻿using HL7.Tea.core;
+﻿using HL7.Tea.Core;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -21,8 +21,8 @@ ZFH|ABC||F||test2@gmail.com|hi";
         [TestMethod]
         public void TestDirectMap()
         {
-            var src = new Message(TEST_MSG);
-            var dst = new Message();
+            var src = new HL7Message(TEST_MSG);
+            var dst = new HL7Message();
             Mapper.DirectMap(src, dst, new List<string> { "ZFH-1", "ZFH-2", "ZFH-4", "ZFH-5", "MSH", "PID", "PV1-1" });
             var exp = @"MSH|^~\&|ADM|RCH|||202403270202||ADT^A03|4425797|P|2.4||||NE
 PID|1||RC123^^^^MR^A~9872360649^^^^HCN^B~123^^^^PI^A~E456^^^^EMR^A~66292A7E8541^^^^PT^B||MICROTEST^CRIT^ONE^^^^L~OPENHOUSE^CRIT^ONE^^^^A||19690414|F|||123 MAIN ST^^Seattle^WA^12345^CAN||(896)321-4545^PRN^CELL||ENG|||RC1234/24|3452353232
@@ -37,8 +37,8 @@ ZFH|ABC||||test2@gmail.com";
         public void TestConditionalMapByField()
         {
             // Arrange
-            var src = new Message(TEST_MSG);
-            var dst = new Message();
+            var src = new HL7Message(TEST_MSG);
+            var dst = new HL7Message();
 
             Mapper.DirectMap(src, dst, new List<string> { "MSH" });
             dst.SetField("PID-3", "");
@@ -63,8 +63,8 @@ PID|||RC123^^^^MR^A~123^^^^PI^A~E456^^^^EMR^A";
         public void TestConditionalMapBySegment()
         {
             // Arrange
-            var src = new Message(TEST_MSG);
-            var dst = new Message();
+            var src = new HL7Message(TEST_MSG);
+            var dst = new HL7Message();
 
             Mapper.DirectMap(src, dst, new List<string> { "MSH" });
 

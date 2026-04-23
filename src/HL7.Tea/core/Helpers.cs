@@ -1,4 +1,4 @@
-﻿namespace HL7.Tea.core
+﻿namespace HL7.Tea.Core
 {
     public class Helpers
     {

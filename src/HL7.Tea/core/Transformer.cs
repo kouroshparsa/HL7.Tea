@@ -1,20 +1,15 @@
 ﻿using RandomFriendlyNameGenerator;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
-namespace HL7.Tea.core
+namespace HL7.Tea.Core
 {
     public class Transformer
     {
         private static readonly Random _random = new Random();
 
-        public static void Transform(Message msg, Dictionary<string, string>specs)
+        public static void Transform(HL7Message msg, Dictionary<string, string>specs)
         {
             foreach (var item in specs)
             {
@@ -39,7 +34,7 @@ namespace HL7.Tea.core
             return DateTime.Now.ToString("yyyyMMddHHmmss");
         }
 
-        public static string SubstituteFields(Message msg, string val)
+        public static string SubstituteFields(HL7Message msg, string val)
         {
             var regex = new Regex(@"\{[A-Z][A-Z][A-Z,1-9]\-\d+(\.\d+)?\}");
             var matches = regex.Matches(val);

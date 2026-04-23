@@ -1,11 +1,7 @@
-﻿using HL7.Tea.core;
+﻿using HL7.Tea.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace HL7.Tea.tests
 {
@@ -24,7 +20,7 @@ ZFH|CVC||F||test2@gmail.com|hi^there";
         public void TestRandomNum()
         {
             // Arrange
-            var msg = new Message(TEST_MSG);
+            var msg = new HL7Message(TEST_MSG);
             var specs = new Dictionary<string, string>
             {
                 { "PID-1", "{random_num}" }
@@ -43,7 +39,7 @@ ZFH|CVC||F||test2@gmail.com|hi^there";
         public void TestNow()
         {
             // Arrange
-            var msg = new Message(TEST_MSG);
+            var msg = new HL7Message(TEST_MSG);
             msg.AddSegment("OBR");
 
             var specs = new Dictionary<string, string>
@@ -62,7 +58,7 @@ ZFH|CVC||F||test2@gmail.com|hi^there";
         [TestMethod]
         public void TestRandomFirstName()
         {
-            var msg = new Message(TEST_MSG);
+            var msg = new HL7Message(TEST_MSG);
 
             var specs = new Dictionary<string, string>
             {
@@ -78,7 +74,7 @@ ZFH|CVC||F||test2@gmail.com|hi^there";
         [TestMethod]
         public void TestRandomLastName()
         {
-            var msg = new Message(TEST_MSG);
+            var msg = new HL7Message(TEST_MSG);
 
             var specs = new Dictionary<string, string>
             {
@@ -94,7 +90,7 @@ ZFH|CVC||F||test2@gmail.com|hi^there";
         [TestMethod]
         public void TestFieldSubstitutions()
         {
-            var msg = new Message(TEST_MSG);
+            var msg = new HL7Message(TEST_MSG);
 
             var specs = new Dictionary<string, string>
             {
@@ -110,7 +106,7 @@ ZFH|CVC||F||test2@gmail.com|hi^there";
         [TestMethod]
         public void TestFieldSubstitutions2()
         {
-            var msg = new Message(TEST_MSG);
+            var msg = new HL7Message(TEST_MSG);
 
             var specs = new Dictionary<string, string>
             {

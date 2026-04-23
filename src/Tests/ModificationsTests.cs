@@ -1,4 +1,4 @@
-﻿using HL7.Tea.core;
+﻿using HL7.Tea.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -23,7 +23,7 @@ ZFH|CVC||F||test2@gmail.com|hi^there";
         public void TestFieldDeletion()
         {
             // Arrange
-            var msg = new Message(TEST_MSG);
+            var msg = new HL7Message(TEST_MSG);
 
             // Act
             msg.RemoveField("ZFH-1");
@@ -41,7 +41,7 @@ ZFH|CVC||F||test2@gmail.com|hi^there";
         public void TestRemoveSegment()
         {
             // Arrange
-            var msg = new Message(TEST_MSG);
+            var msg = new HL7Message(TEST_MSG);
 
             // Act
             msg.RemoveSegment("ZFH");
@@ -55,7 +55,7 @@ ZFH|CVC||F||test2@gmail.com|hi^there";
         public void TestRemoveSegmentWithIndex()
         {
             // Arrange
-            var msg = new Message(TEST_MSG);
+            var msg = new HL7Message(TEST_MSG);
 
             // Act
             msg.RemoveSegment("ZFH", 0);

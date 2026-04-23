@@ -1,4 +1,4 @@
-﻿using HL7.Tea.core;
+﻿using HL7.Tea.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 
@@ -18,7 +18,7 @@ ZFH|CVC||F||test2@gmail.com|hi^there";
         [TestMethod]
         public void TestPromotions()
         {
-            Message msg = new Message(TEST_MSG);
+            HL7Message msg = new HL7Message(TEST_MSG);
             msg.Promote(new Dictionary<string, string>{
                 { "message_type", "MSH-9.1" },
                 { "trigger_event", "MSH-9.2" }

@@ -1,4 +1,4 @@
-﻿using HL7.Tea.core;
+﻿using HL7.Tea.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace HL7.Tea.tests
@@ -17,9 +17,9 @@ ZFH|CVC||F||test2@gmail.com|hi^there";
         [TestMethod]
         public void TestFieldDeletion()
         {
-            var msg = new Message(TEST_MSG);
-            var res = msg.GetPatientAge();
-            Assert.AreEqual(56, msg.GetPatientAge());
+            var msg = new HL7Message(TEST_MSG);
+            var res = msg.GetPatientAge(new DateTime(2026, 1, 1));
+            Assert.AreEqual(56, res);
         }
 
 

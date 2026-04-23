@@ -3,10 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace HL7.Tea.core
+namespace HL7.Tea.Core
 {
-    public class Message
+    public class HL7Message
     {
+        const string START_BLOCK = "\x0b";
+        const string END_BLOCK = "\x1c\x0d";
+
         public List<Segment> Segments { get; private set; }
         // Example: key: OBX value: [first obx, second obx] where first obx is a list of fields [obx-1,obx-2,...]
         public Dictionary<string, string> Promotions { get; private set; }
@@ -32,14 +35,14 @@ namespace HL7.Tea.core
             }
         }
 
-        public Message(string msg)
+        public HL7Message(string msg)
         {
             Segments = new List<Segment>();
             Promotions = new Dictionary<string, string>();
             Parse(msg);
         }
 
-        public Message()
+        public HL7Message()
         {
             Segments = new List<Segment>();
             Promotions = new Dictionary<string, string>();
@@ -55,7 +58,7 @@ namespace HL7.Tea.core
             return false;
         }
         
-        public List<Segment>GetSegmenta(string segmentName)
+        public List<Segment>GetSegments(string segmentName)
         {
             return this.Segments.Where(seg => seg.Name == segmentName).ToList();
         }
@@ -123,9 +126,9 @@ namespace HL7.Tea.core
         }
 
         public void RemoveField(
-    string path,
-    int? segmentRepetitionIndex = null,
-    int? fieldRepetitionIndex = null)
+            string path,
+            int? segmentRepetitionIndex = null,
+            int? fieldRepetitionIndex = null)
         {
             var hp = new HL7Path(path);
             int segInd = 0;
@@ -231,8 +234,11 @@ namespace HL7.Tea.core
         {
             return GetFieldOne(this.Promotions[key]);
         }
-        public int? GetPatientAge()
+        
+        public int? GetPatientAge(DateTime? specifiedToday = null)
         {
+            DateTime today = specifiedToday ?? DateTime.Today;
+
             // Retrieves patient's age from PID segment
             if (!HasSegment("PID"))
                 return null;
@@ -249,8 +255,6 @@ namespace HL7.Tea.core
                 return null;
             }
 
-            var today = DateTime.Today;
-
             int age = today.Year - dob.Year;
 
             // Adjust if birthday hasn't occurred yet this year
@@ -266,6 +270,19 @@ namespace HL7.Tea.core
         public void Transform(Dictionary<string, string> specs)
         {
             Transformer.Transform(this, specs);
+        }
+
+        public string GetAck(string ackType = "AA") {
+            string sending_app = GetFieldOne("MSH-3");
+            string sending_fac = GetFieldOne("MSH-4");
+            string receiving_app = GetFieldOne("MSH-5");
+            string receiving_fac = GetFieldOne("MSH-6");
+            string msg_time = GetFieldOne("MSH-7");
+            string control_id = GetFieldOne("MSH-10");
+            string processing_id = GetFieldOne("MSH-11");
+            string version_id = GetFieldOne("MSH-12");
+            string ack = $"{START_BLOCK}MSH|^~\\&|{sending_app}|{sending_fac}|{receiving_app}|{receiving_fac}|{msg_time}||ACK|{control_id}|{processing_id}|{version_id}\rMSA|{ackType}|{control_id}{END_BLOCK}";
+            return ack;
         }
     }
 }

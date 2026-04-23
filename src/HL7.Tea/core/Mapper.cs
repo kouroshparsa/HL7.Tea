@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HL7.Tea.core
+namespace HL7.Tea.Core
 {
     public class Mapper
     {
         /// <summary>
         /// Applies direct mapping from src to dst
         /// </summary>
-        public static void DirectMap(Message src, Message dst, List<string> paths)
+        public static void DirectMap(HL7Message src, HL7Message dst, List<string> paths)
         {
             var groupedPaths = new Dictionary<string, List<string>>();
 
@@ -53,8 +53,8 @@ namespace HL7.Tea.core
         /// Performs a conditional mapping from src to dst with condition function
         /// </summary>
         public static void ConditionalMap(
-            Message src,
-            Message dst,
+            HL7Message src,
+            HL7Message dst,
             string path,
             Func<object, bool> condition)
         {

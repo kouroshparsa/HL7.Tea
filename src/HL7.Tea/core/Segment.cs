@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace HL7.Tea.core
+namespace HL7.Tea.Core
 {
     public class Segment
     {

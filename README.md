@@ -13,7 +13,7 @@ HL7.Tea
 - [Inspecting Message](#inspecting-messages)
 - [Data Mapping](#data-mapping)
 - [Promotions](#promotions)
-- [Tranformation](#transformation)
+- [Transformation](#transformation)
 - [MLLP Data Transport](#mllp-data-transport)
 - [Helper Functions](#helper_functions)
 - [Development Requests](#development-requests)
@@ -30,7 +30,7 @@ Using nuget:
 ## Loading HL7v2 data
 Example:
 ```csharp
-using HL7.Tea.core;
+using HL7.Tea.Core;
 string msgStr = @"MSH|^~\\&|ADM|RCH|||202403270202||ADT^A03|4425797|P|2.4||||NE
 EVN|A03|202403270202|||UNKNOWN^RUN^MIDNT^^^^^^^^^^U|20240326
 PID|1||RC123^^^^MR^A~9872360649^^^^HCN^B~123^^^^PI^A~E456^^^^EMR^B~66292A7E8541^^^^PT^A||MICROTEST^CRIT^ONE^^^^L~OPENHOUSE^CRIT^ONE^^^^A||19690414|F|||123 MAIN ST^^Seattle^WA^12345^CAN||(896)321-4545^PRN^CELL||ENG|||RC1234/24|3452353232
@@ -39,7 +39,7 @@ GT1|768||Doe^Jane
 ZFH|CVC|V|F||test1@gmail.com
 ZFH|CVC|C|F||test2@gmail.com|hi^there";
 
-var msg = new Message(msgStr);
+var msg = new HL7Message(msgStr);
 ```
  
 ```shell
@@ -62,7 +62,7 @@ The example below shows how you can loop through values using `GetFieldAll` and 
 
 Example:
 ```csharp
-var msg = new Message(msgStr);
+var msg = new HL7Message(msgStr);
 foreach (var pid3 in msg.GetFieldAll("PID-3"))
 {
     if (Helpers.GetSubfield(pid3, 6) == "A")
@@ -78,7 +78,7 @@ PID-3.5 =  PT
 
 Example: You loop through the segments and inspect them or modify them in a loop:
 ```csharp
-var msg = new Message(msgStr);
+var msg = new HL7Message(msgStr);
 foreach(var seg in msg.Segments){
     if (seg.Name == "ZFH")
         Console.WriteLine(seg.GetFieldOne("ZFH-5"));
@@ -100,7 +100,7 @@ msg.SetField("ZFH-2", "123");
 
 Example: This example shows how to set sub-fields:
 ```csharp
-var msg = new Message(msgStr);
+var msg = new HL7Message(msgStr);
 var subField = msg.GetFieldOne("PV1-6.3");
 Console.WriteLine(subField);
 ```
@@ -138,9 +138,9 @@ You can specify either the segment name, or field or subfield.
 
 Example:
 ```csharp
-using HL7.Tea.core;
-var src = new Message(TEST_MSG);
-var dst = new Message();
+using HL7.Tea.Core;
+var src = new HL7Message(TEST_MSG);
+var dst = new HL7Message();
 Mapper.DirectMap(src, dst, new List<string> {"MSH", "PID", "PV1-1", "ZFH-1", "ZFH-2", "ZFH-4", "ZFH-5" });
 Console.WriteLine(res);
 ```
@@ -149,10 +149,10 @@ Note that the mapper keeps the order of the segments.
 
 Example: This example demonstrates **conditional mapping** of repeated fields.
 ```csharp
-using HL7.Tea.core;
+using HL7.Tea.Core;
 
-var src = new Message(TEST_MSG);
-var dst = new Message();
+var src = new HL7Message(TEST_MSG);
+var dst = new HL7Message();
 Mapper.DirectMap(src, dst, new List<string> { "MSH" });
 
 
@@ -172,7 +172,7 @@ PID|||RC123^^^^MR^A~123^^^^PI^A~66292A7E8541^^^^PT^A
 ## Promotions
 Example 6: The example below demonstrate how you can promote properties:
 ```csharp
-Message msg = new Message(TEST_MSG);
+HL7Message msg = new HL7Message(TEST_MSG);
             msg.Promote(new Dictionary<string, string>{
                 { "message_type", "MSH-9.1" },
                 { "trigger_event", "MSH-9.2" }
@@ -198,7 +198,7 @@ Transformation allows you to substitute values in the message. Below is the list
 
 Example: Put a random first name into PID-5.2 and print the value
 ```csharp
-var msg = new Message(TEST_MSG);
+var msg = new HL7Message(TEST_MSG);
 
 var specs = new Dictionary<string, string>
 {
@@ -214,7 +214,7 @@ var firstName = msg.GetFieldOne("PID-5.2");
 
 Example: To get patient's age:
 ```csharp
-var msg = new Message(TEST_MSG);
+var msg = new HL7Message(TEST_MSG);
 var res = msg.GetPatientAge();
 Console.WriteLine(msg.GetPatientAge());
 ```
