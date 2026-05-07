@@ -11,6 +11,7 @@ namespace HL7.Tea.Core
 
         public static void Transform(HL7Message msg, Dictionary<string, string>specs)
         {
+            var regex = new Regex(@"\{[A-Z][A-Z][A-Z,1-9]\-\d+(\.\d+)?\}");
             foreach (var item in specs)
             {
                 string path = item.Key;
@@ -21,8 +22,15 @@ namespace HL7.Tea.Core
                 newVal = newVal.Replace("{now}", GetCurrentDate().Substring(0, 12));
                 newVal = newVal.Replace("{random_first_name}", NameGenerator.PersonNames.Get());
                 newVal = newVal.Replace("{random_last_name}", NameGenerator.PersonNames.Get());
-                newVal = SubstituteFields(msg, newVal);
-                msg.SetField(path, newVal);
+                if (regex.IsMatch(newVal))
+                {
+                    SubstituteFields(msg, path, newVal);
+                }
+                else
+                {
+                    msg.SetField(path, newVal);
+                }
+
             }
         }
         public static string GetRandomSixDigits() {
@@ -34,36 +42,40 @@ namespace HL7.Tea.Core
             return DateTime.Now.ToString("yyyyMMddHHmmss");
         }
 
-        public static string SubstituteFields(HL7Message msg, string val)
+        public static void SubstituteFields(HL7Message msg, string targetPath, string sub)
         {
+            // Example: sub="prefix-{OBX-3}"
             var regex = new Regex(@"\{[A-Z][A-Z][A-Z,1-9]\-\d+(\.\d+)?\}");
-            var matches = regex.Matches(val);
+            var matches = regex.Matches(sub);
 
-            var substitutions = new List<(string Match, string Value)>();
-
-            foreach (Match match in matches)
+            string targetSegName = targetPath.Substring(0, 3);
+            foreach (var seg in msg.GetSegments(targetSegName))
             {
-                string fullMatch = match.Value;
-                string path = fullMatch.Substring(1, fullMatch.Length - 2);
-
-                string field = msg.GetFieldOne(path);
-
-                if (field == null)
+                string newVal = sub;
+                foreach (Match match in matches)
                 {
-                    substitutions.Add((fullMatch, ""));
+                    string fullMatch = match.Value;
+                    string path = fullMatch.Substring(1, fullMatch.Length - 2);
+                    string segName = path.Substring(0, 3);
+                    string field = null;
+                    if (segName == targetSegName)
+                        field = seg.GetFieldOne(path);
+                    else
+                        field = msg.GetFieldOne(path);
+
+                    if (field == null)
+                    {
+                        newVal = newVal.Replace(fullMatch, "");
+                    }
+                    else
+                    {
+                        newVal = newVal.Replace(fullMatch, field);
+                    }
                 }
-                else
-                {
-                    substitutions.Add((fullMatch, field));
-                }
+                seg.SetField(targetPath, newVal);
+
             }
 
-            foreach (var sub in substitutions)
-            {
-                val = val.Replace(sub.Match, sub.Value);
-            }
-
-            return val;
         }
     }
 }

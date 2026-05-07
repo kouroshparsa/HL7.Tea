@@ -5,13 +5,16 @@
     <TargetFramework>net48</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>HL7.Tea</PackageId>
-    <Version>2.0.1</Version>
+    <Version>2.0.2</Version>
     <Authors>Kourosh Parsa</Authors>
     <Description>HL7 processing library</Description>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<PackageLicenseFile>LICENSE</PackageLicenseFile>
-	<AssemblyVersion>2.0.1.0</AssemblyVersion>
-	<FileVersion>2.0.1.0</FileVersion>
+	<AssemblyVersion>2.0.2.0</AssemblyVersion>
+	<FileVersion>2.0.2.0</FileVersion>
+	<Copyright>Copyrighted by Kourosh Parsa</Copyright>
+	<PackageProjectUrl>https://github.com/kouroshparsa/HL7.Tea</PackageProjectUrl>
+	<RepositoryUrl>https://github.com/kouroshparsa/HL7.Tea</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

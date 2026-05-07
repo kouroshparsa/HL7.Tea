@@ -273,6 +273,14 @@ namespace HL7.Tea.Core
         }
 
         public string GetAck(string ackType = "AA") {
+            /*
+             * MSH-3 (Sending App)
+                MSH-4 (Sending Facility)
+                MSH-5 (Receiving App)
+                MSH-6 (Receiving Fac.)
+
+            Note that in the response, these must be reversed
+             */
             string sending_app = GetFieldOne("MSH-3");
             string sending_fac = GetFieldOne("MSH-4");
             string receiving_app = GetFieldOne("MSH-5");
@@ -281,7 +289,7 @@ namespace HL7.Tea.Core
             string control_id = GetFieldOne("MSH-10");
             string processing_id = GetFieldOne("MSH-11");
             string version_id = GetFieldOne("MSH-12");
-            string ack = $"{START_BLOCK}MSH|^~\\&|{sending_app}|{sending_fac}|{receiving_app}|{receiving_fac}|{msg_time}||ACK|{control_id}|{processing_id}|{version_id}\rMSA|{ackType}|{control_id}{END_BLOCK}";
+            string ack = $"{START_BLOCK}MSH|^~\\&|{receiving_app}|{receiving_fac}|{sending_app}|{sending_fac}|{msg_time}||ACK|{control_id}|{processing_id}|{version_id}\rMSA|{ackType}|{control_id}{END_BLOCK}";
             return ack;
         }
     }
